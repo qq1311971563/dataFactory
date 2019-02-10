@@ -6,9 +6,21 @@
 
     <groupId>com.toolAnt</groupId>
     <artifactId>dataFactory</artifactId>
-    <version>0.0.1</version>
-    <packaging>jar</packaging>
+    <version>1.0.0</version>
+    <!--
+    主版本号（1）：当功能模块有较大的变动,有部分内容不兼容之前的
+        比如增加多个模块或者整体架构发生变化。
+        此版本号由项目决定是否修改。（另一种说法：产品的主体构件或构件之间的接口协议发生重大变动）
+    子版本号（0）：增加新功能或者功能进行更新
+        比如增加了对权限控制、增加自定义视图等功能。
+        此版本号由项目决定是否修改。（另一种说法：产品的数据结构发生变动）
+    阶段版本号（0）： Bug 修复或是一些小的变动
+        比如修复一个严重的bug,即可发布一个修订版。
+        此版本号由项目经理决定是否修改。（另一种说法：产品的数据结构未发生变动，仅修复bug）
 
+
+    -->
+    <packaging>jar</packaging>
     <!--指定仓库地址-->
     <distributionManagement>
         <repository>
@@ -17,7 +29,6 @@
             <url>http://192.168.48.133:8081/repository/test-release/</url>
         </repository>
     </distributionManagement>
-
     <properties>
         <java.version>1.8</java.version>
     </properties>
