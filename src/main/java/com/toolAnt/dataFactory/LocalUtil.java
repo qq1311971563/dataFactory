@@ -149,7 +149,7 @@ public class LocalUtil {
      * @param provinceName
      * @param city
      * @return
-     * @descript 根据国家名和省份名和城市名获取所有区
+     * @TODO: 功能:   根据国家名和省份名和城市名获取所有区
      */
     private List<Element> areas(String countryName, String provinceName, String city) {
         List<Element> provinces = this.provinces(countryName);
