@@ -2,7 +2,7 @@ package com.toolAnt.dataFactory;
 
 import org.junit.Test;
 
-public class fieldFactoryTest {
+public class FieldFactoryTest {
 
     @Test
     public void genName() {
@@ -27,7 +27,7 @@ public class fieldFactoryTest {
 
     @Test
     public void genAddress(){
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             System.out.println(FieldFactory.genAddress());
         }
     }

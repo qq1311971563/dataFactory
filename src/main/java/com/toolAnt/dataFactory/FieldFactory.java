@@ -1,5 +1,6 @@
 package com.toolAnt.dataFactory;
 
+import java.util.List;
 import java.util.Random;
 
 public class FieldFactory {
@@ -7,86 +8,118 @@ public class FieldFactory {
 
     /**
      * 随机一个姓名
+     *
      * @return 中文姓名
      */
     public static String genName() {
         return getSurname() + getName(getRandomNumber(2));
     }
+
     /**
      * 获取指定性别的姓名
+     *
      * @param sex 性别 0 男  1  女
      * @return 中文姓名
      */
-    public static String genName(Integer sex){
+    public static String genName(Integer sex) {
         return getSurname() + getName(sex);
     }
+
     /**
      * 返回Email
+     *
      * @param lMin 最小长度
      * @param lMax 最大长度
      * @return
      */
-    public static String genEmail(int lMin,int lMax) {
-        int length=getRandomNumber(lMin,lMax);
+    public static String genEmail(int lMin, int lMax) {
+        int length = getRandomNumber(lMin, lMax);
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < length; i++) {
-            int number = (int)(Math.random()*base.length());
+            int number = (int) (Math.random() * base.length());
             sb.append(base.charAt(number));
         }
-        sb.append(email_suffix[(int)(Math.random()*email_suffix.length)]);
+        sb.append(email_suffix[(int) (Math.random() * email_suffix.length)]);
         return sb.toString();
     }
 
-    public static String genAddress(){
-        return  "";
+    public static String genAddress() {
+        String province, city, area;
+        province = getRandomProvince();
+        city = getRandomCity(province);
+        area = getRandomArea(province, city);
+        return province + city + area + getRoad();
     }
 
 
-    private static String getAddress(){
-        return "";
-    }
     /**
      * 返回地址
+     *
      * @return
      */
     private static String getRoad() {
-        int index=getRandomNumber(0,road.length-1);
-        String first=road[index];
-        String second=String.valueOf(getRandomNumber(11,150))+"号";
-        String third="-"+getRandomNumber(1,20)+"-"+getRandomNumber(1,10);
-        return first+second+third;
+        int index = getRandomNumber(0, road.length - 1);
+        String first = road[index];
+        String second = String.valueOf(getRandomNumber(11, 150)) + "号";
+        String third = "-" + getRandomNumber(1, 20) + "-" + getRandomNumber(1, 10);
+        return first + second + third;
     }
-    private static String getSurname(){
+
+    private static String getSurname() {
         return surname[getRandomNumber(surname.length)];
     }
-    private static String getName(Integer sex){
+
+    private static String getName(Integer sex) {
         //随机姓名长度1-2;
-        int nameLength = getRandomNumber(2)+1;
-        String name="";
+        int nameLength = getRandomNumber(2) + 1;
+        String name = "";
         String names = "";
-        if(sex == 0){
+        if (sex == 0) {
             names = boy;
-        }else{
+        } else {
             names = girl;
         }
         for (int i = 0; i < nameLength; i++) {
             int temp = getRandomNumber(boy.length());
-            name += (names.substring(temp -2,temp-1).toString());
+            name += (names.substring(temp - 2, temp - 1).toString());
         }
-        return  name;
+        return name;
     }
-    private static int getRandomNumber(Integer max){
+
+    private static String getRandomProvince() {
+        return Provinces.get(getRandomNumber(Provinces.size()));
+    }
+
+    private static String getRandomCity(String Province) {
+        List<String> Cities = localUtil.getCities("中国", Province);
+        return Cities.get(getRandomNumber(Cities.size()));
+    }
+
+    private static String getRandomArea(String Province, String City) {
+        List<String> Areas = localUtil.getAreas("中国", Province, City);
+        if (Areas.size() <= 0) {
+            return "";
+        }
+        return Areas.get(getRandomNumber(Areas.size()));
+    }
+
+    private static LocalUtil localUtil = LocalUtil.getInstance();
+    private static List<String> Provinces = localUtil.getProvinces("中国");
+
+    private static int getRandomNumber(Integer max) {
         Random random = new Random();
         return random.nextInt(max);
     }
-    private static int getRandomNumber(Integer start,Integer end){
-        return (int)(Math.random()*(end-start+1)+start);
+
+    private static int getRandomNumber(Integer start, Integer end) {
+        return (int) (Math.random() * (end - start + 1) + start);
     }
+
     public static String base = "abcdefghijklmnopqrstuvwxyz0123456789";
-    private static final String[] email_suffix="@gmail.com,@yahoo.com,@msn.com,@hotmail.com,@aol.com,@ask.com,@live.com,@qq.com,@0355.net,@163.com,@163.net,@263.net,@3721.net,@yeah.net,@googlemail.com,@126.com,@sina.com,@sohu.com,@yahoo.com.cn".split(",");
-    private static String girl="秀娟英华慧巧美娜静淑惠珠翠雅芝玉萍红娥玲芬芳燕彩春菊兰凤洁梅琳素云莲真环雪荣爱妹霞香月莺媛艳瑞凡佳嘉琼勤珍贞莉桂娣叶璧璐娅琦晶妍茜秋珊莎锦黛青倩婷姣婉娴瑾颖露瑶怡婵雁蓓纨仪荷丹蓉眉君琴蕊薇菁梦岚苑婕馨瑗琰韵融园艺咏卿聪澜纯毓悦昭冰爽琬茗羽希宁欣飘育滢馥筠柔竹霭凝晓欢霄枫芸菲寒伊亚宜可姬舒影荔枝思丽 ";
-    private static String boy="伟刚勇毅俊峰强军平保东文辉力明永健世广志义兴良海山仁波宁贵福生龙元全国胜学祥才发武新利清飞彬富顺信子杰涛昌成康星光天达安岩中茂进林有坚和彪博诚先敬震振壮会思群豪心邦承乐绍功松善厚庆磊民友裕河哲江超浩亮政谦亨奇固之轮翰朗伯宏言若鸣朋斌梁栋维启克伦翔旭鹏泽晨辰士以建家致树炎德行时泰盛雄琛钧冠策腾楠榕风航弘";
-    private static String[] road=("重庆大厦,黑龙江路,十梅庵街,遵义路,湘潭街,瑞金广场,仙山街,仙山东路,仙山西大厦,白沙河路,赵红广场,机场路,民航街,长城南路,流亭立交桥," +
+    private static final String[] email_suffix = "@gmail.com,@yahoo.com,@msn.com,@hotmail.com,@aol.com,@ask.com,@live.com,@qq.com,@0355.net,@163.com,@163.net,@263.net,@3721.net,@yeah.net,@googlemail.com,@126.com,@sina.com,@sohu.com,@yahoo.com.cn".split(",");
+    private static String girl = "秀娟英华慧巧美娜静淑惠珠翠雅芝玉萍红娥玲芬芳燕彩春菊兰凤洁梅琳素云莲真环雪荣爱妹霞香月莺媛艳瑞凡佳嘉琼勤珍贞莉桂娣叶璧璐娅琦晶妍茜秋珊莎锦黛青倩婷姣婉娴瑾颖露瑶怡婵雁蓓纨仪荷丹蓉眉君琴蕊薇菁梦岚苑婕馨瑗琰韵融园艺咏卿聪澜纯毓悦昭冰爽琬茗羽希宁欣飘育滢馥筠柔竹霭凝晓欢霄枫芸菲寒伊亚宜可姬舒影荔枝思丽 ";
+    private static String boy = "伟刚勇毅俊峰强军平保东文辉力明永健世广志义兴良海山仁波宁贵福生龙元全国胜学祥才发武新利清飞彬富顺信子杰涛昌成康星光天达安岩中茂进林有坚和彪博诚先敬震振壮会思群豪心邦承乐绍功松善厚庆磊民友裕河哲江超浩亮政谦亨奇固之轮翰朗伯宏言若鸣朋斌梁栋维启克伦翔旭鹏泽晨辰士以建家致树炎德行时泰盛雄琛钧冠策腾楠榕风航弘";
+    private static String[] road = ("重庆大厦,黑龙江路,十梅庵街,遵义路,湘潭街,瑞金广场,仙山街,仙山东路,仙山西大厦,白沙河路,赵红广场,机场路,民航街,长城南路,流亭立交桥," +
             "虹桥广场,长城大厦,礼阳路,风岗街,中川路,白塔广场,兴阳路,文阳街,绣城路,河城大厦,锦城广场,崇阳街,华城路,康城街,正阳路,和阳广场,中城路,江城大厦,顺城路," +
             "安城街,山城广场,春城街,国城路,泰城街,德阳路,明阳大厦,春阳路,艳阳街,秋阳路,硕阳街,青威高速,瑞阳街,丰海路,双元大厦,惜福镇街道,夏庄街道,古庙工业园,中山街," +
             "太平路,广西街,潍县广场,博山大厦,湖南路,济宁街,芝罘路,易州广场,荷泽四路,荷泽二街,荷泽一路,荷泽三大厦,观海二广场,广西支街,观海一路,济宁支街,莒县路," +
@@ -122,7 +155,7 @@ public class FieldFactory {
             "大成大厦,芙蓉路,历城广场,大名路,昌平街,平定路,长兴街,浦口广场,诸城大厦,和兴路,德盛街,宁海路,威海广场,东山路,清和街,姜沟路,雒口大厦,松山广场,长春街," +
             "昆明路,顺兴街,利津路,阳明广场,人和路,郭口大厦,营口路,昌邑街,孟庄广场,丰盛街,埕口路,丹阳街,汉口路,洮南大厦,桑梓路,沾化街,山口路,沈阳街,南口广场," +
             "振兴街,通化路,福寺大厦,峄县路,寿光广场,曹县路,昌乐街,道口路,南九水街,台湛广场,东光大厦,驼峰路,太平山,标山路,云溪广场,太清路").split(",");
-    static  String[] surname = {"赵", "钱", "孙", "李", "周", "吴", "郑", "王", "冯", "陈", "褚", "卫", "蒋", "沈", "韩", "杨", "朱", "秦", "尤", "许",
+    static String[] surname = {"赵", "钱", "孙", "李", "周", "吴", "郑", "王", "冯", "陈", "褚", "卫", "蒋", "沈", "韩", "杨", "朱", "秦", "尤", "许",
             "何", "吕", "施", "张", "孔", "曹", "严", "华", "金", "魏", "陶", "姜", "戚", "谢", "邹", "喻", "柏", "水", "窦", "章", "云", "苏", "潘", "葛", "奚", "范", "彭", "郎",
             "鲁", "韦", "昌", "马", "苗", "凤", "花", "方", "俞", "任", "袁", "柳", "酆", "鲍", "史", "唐", "费", "廉", "岑", "薛", "雷", "贺", "倪", "汤", "滕", "殷",
             "罗", "毕", "郝", "邬", "安", "常", "乐", "于", "时", "傅", "皮", "卞", "齐", "康", "伍", "余", "元", "卜", "顾", "孟", "平", "黄", "和",

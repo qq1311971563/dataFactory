@@ -6,7 +6,7 @@
 
     <groupId>com.toolAnt</groupId>
     <artifactId>dataFactory</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <!--
     主版本号（1）：当功能模块有较大的变动,有部分内容不兼容之前的
         比如增加多个模块或者整体架构发生变化。
